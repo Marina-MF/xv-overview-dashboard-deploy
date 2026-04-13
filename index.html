@@ -54,6 +54,19 @@
   <!-- End Google Tag Manager -->
 <style>html,body{width:100%;height:100%;margin:0;padding:0;font-family:var(--ff-body, Tahoma),sans-serif}</style><link rel="stylesheet" href="styles-C2UBMNXC.css" media="print" onload="this.media='all'"><noscript><link rel="stylesheet" href="styles-C2UBMNXC.css"></noscript></head>
 <body>
+  <!-- Single Page Apps for GitHub Pages: restore route from query string -->
+  <script>
+    (function(l) {
+      if (l.search[1] === '/') {
+        var decoded = l.search.slice(1).split('&').map(function(s) {
+          return s.replace(/~and~/g, '&')
+        }).join('?');
+        window.history.replaceState(null, null,
+          l.pathname.slice(0, -1) + decoded + l.hash
+        );
+      }
+    }(window.location))
+  </script>
   <!-- Google Tag Manager (noscript) -->
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-P87GMV" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <!-- End Google Tag Manager (noscript) -->
