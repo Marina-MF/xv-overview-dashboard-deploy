@@ -1,0 +1,108 @@
+// region Media mixin
+/**
+// Current breakpoints:
+* Mobile (≤ 768px)
+* Tablet (768px - 1024px)
+* Desktop (≥ 1024px)
+
+* For use it you need to import mixins to your stylesheet => @import 'mixin';
+* @include breakpoint('mobile' || 'tablet' || 'desktop')
+*/
+$breakpoints: (
+  'mobile': (max: 768px),
+  'tablet': (min: 768px, max: 1024px),
+  'desktop': (min: 1024px)
+);
+
+@mixin breakpoint($name, $direction: null) {
+  $bp: map-get($breakpoints, $name);
+
+  @if not $bp {
+    @warn "⚠️ Breakpoint '#{$name}' not found. Available: #{map-keys($breakpoints)}";
+    @content;
+  }
+
+  $min: map-get($bp, min);
+  $max: map-get($bp, max);
+
+  @if $direction == 'up' {
+    @if $min {
+      @media (min-width: #{$min}) {
+        @content;
+      }
+    } @else {
+      @warn "⚠️ Breakpoint '#{$name}' has no 'min' value for 'up'.";
+      @content;
+    }
+
+  } @else if $direction == 'down' {
+    @if $max {
+      @media (max-width: #{$max}) {
+        @content;
+      }
+    } @else {
+      @warn "⚠️ Breakpoint '#{$name}' has no 'max' value for 'down'.";
+      @content;
+    }
+
+  } @else {
+    $query: null;
+
+    @if $min and $max {
+      $query: "(min-width: #{$min}) and (max-width: #{$max})";
+    } @else if $min {
+      $query: "(min-width: #{$min})";
+    } @else if $max {
+      $query: "(max-width: #{$max})";
+    }
+
+    @if $query {
+      @media #{unquote($query)} {
+        @content;
+      }
+    } @else {
+      @warn "⚠️ Breakpoint '#{$name}' has neither 'min' nor 'max'.";
+      @content;
+    }
+  }
+}
+
+// endregion
+
+// region Spacing classes
+@mixin generate-spacing($prefix: null, $spacing-count: 13) {
+  $sep: if($prefix != null and $prefix != '', "-#{$prefix}", "");
+
+  @for $i from 1 through $spacing-count {
+    $key: if($i < 10, '0#{$i}', '#{$i}');
+
+    // 🔹 GAP
+    .gap#{$sep}-#{$key} { gap: var(--spacing-#{$key}); }
+    .gap#{$sep}-#{$key}-row { row-gap: var(--spacing-#{$key}); }
+    .gap#{$sep}-#{$key}-col { column-gap: var(--spacing-#{$key}); }
+
+    // 🔹 PADDING
+    .p#{$sep}-#{$key} { padding: var(--spacing-#{$key}); }
+    .p#{$sep}-#{$key}-x { padding-left: var(--spacing-#{$key}); padding-right: var(--spacing-#{$key}); }
+    .p#{$sep}-#{$key}-y { padding-top: var(--spacing-#{$key}); padding-bottom: var(--spacing-#{$key}); }
+    .p#{$sep}-#{$key}-t { padding-top: var(--spacing-#{$key}); }
+    .p#{$sep}-#{$key}-r { padding-right: var(--spacing-#{$key}); }
+    .p#{$sep}-#{$key}-b { padding-bottom: var(--spacing-#{$key}); }
+    .p#{$sep}-#{$key}-l { padding-left: var(--spacing-#{$key}); }
+
+    // 🔹 MARGIN
+    .m#{$sep}-#{$key} { margin: var(--spacing-#{$key}); }
+    .m#{$sep}-#{$key}-x { margin-left: var(--spacing-#{$key}); margin-right: var(--spacing-#{$key}); }
+    .m#{$sep}-#{$key}-y { margin-top: var(--spacing-#{$key}); margin-bottom: var(--spacing-#{$key}); }
+    .m#{$sep}-#{$key}-t { margin-top: var(--spacing-#{$key}); }
+    .m#{$sep}-#{$key}-r { margin-right: var(--spacing-#{$key}); }
+    .m#{$sep}-#{$key}-b { margin-bottom: var(--spacing-#{$key}); }
+    .m#{$sep}-#{$key}-l { margin-left: var(--spacing-#{$key}); }
+  }
+
+  // 🔹 Additionally — zero classes
+  .gap#{$sep}-0 { gap: 0; }
+  .p#{$sep}-0 { padding: 0; }
+  .m#{$sep}-0 { margin: 0; }
+}
+// endregion Spacing classes
